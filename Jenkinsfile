@@ -1,34 +1,30 @@
 pipeline {
-    // Run pipeline on any available Jenkins agent
+
+    // Use any available Jenkins worker (agent)
     agent any
 
-    // Environment variables (AWS credentials from Jenkins)
+    // AWS credentials stored securely in Jenkins
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')      // AWS access key
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')      // AWS secret key
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')      // AWS Access Key from Jenkins
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')      // AWS Secret Key from Jenkins
         AWS_DEFAULT_REGION    = 'ap-south-1'                        // AWS region
     }
 
     stages {
 
-        stage('Clone GitHub Repo') {
-            steps {
-                // Clone the GitHub repository
-                git branch: 'main',
-                    url: 'https://github.com/your-username/terraform-jenkins-docker.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                // Build Docker image that contains Terraform
+                // Build Docker image using Dockerfile in this repo
+                // This image will contain Terraform
                 sh 'docker build -t terraform-image .'
             }
         }
 
         stage('Run Terraform') {
             steps {
-                // Run Docker container and execute Terraform inside it
+                // Run Terraform inside Docker container
+                // Pass AWS credentials to the container
+                // Mount terraform folder to container
                 sh '''
                 docker run --rm \
                 -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
