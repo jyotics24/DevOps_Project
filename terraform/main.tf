@@ -1,10 +1,15 @@
-# Configure AWS provider
+# Tell Terraform which provider to use
 provider "aws" {
-  region = "ap-south-1"   # AWS region
+  region = "ap-south-1"   # Mumbai region
 }
 
 # Create an S3 bucket
 resource "aws_s3_bucket" "my_bucket" {
-  bucket        = "jyoti-jenkins-terraform-s3-demo"  # Bucket name (must be unique)
-  force_destroy = true                               # Delete bucket even if not empty
+  bucket = "jyotiprakash-terraform-jenkins-bucket-12345"
+}
+
+# Optional: make bucket private
+resource "aws_s3_bucket_acl" "bucket_acl" {
+  bucket = aws_s3_bucket.my_bucket.id
+  acl    = "private"
 }
