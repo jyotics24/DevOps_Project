@@ -81,3 +81,12 @@ resource "aws_s3_bucket_public_access_block" "block_public" {
 output "s3_bucket_name" {
   value = aws_s3_bucket.my_bucket.bucket
 }
+########################################
+# Include second S3 bucket configuration
+########################################
+module "s3_second_bucket" {
+  source = "./s3_second_bucket.tf"
+}
+########################################
+# End of Terraform main configuration
+########################################
